@@ -1,6 +1,6 @@
 == DOMBrew
 
-DOMBrew is a DOM builder written entirely in <a href="http://jashkenas.github.com/coffee-script/">CoffeeScript</a>.
+DOMBrew is a DOM builder written entirely in {CoffeeScript}[http://jashkenas.github.com/coffee-script/]
 The easiest way to install it is to grab dombrew.js from the repository.
 
     # DOMBrew builds DOM from a css like selector and a hash of attributes.
@@ -39,11 +39,12 @@ The easiest way to install it is to grab dombrew.js from the repository.
     # .dom()  or .asDOM()    # => result as DOM
     # .html() or .asHTML()   # => result as html in a string
 
+---
 === Contribute
 
 Fork. Develop. Extra points for tests. :)
 
-You will need <code>node</code> and <code>coffee-script</code> installed:
+You will need node and coffee-script installed:
 
 * Follow these instructions to install node and npm: https://github.com/joyent/node/wiki/Installation
 * npm install -g coffee-script
