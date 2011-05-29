@@ -16,10 +16,10 @@ The easiest way to install it is to grab dombrew.js from the repository.
       .append(
         $b 'li#first', 'one'
         $b 'li', 'two'
-        $b 'li', text: "three", data: { stuff: 'abc', more: 'def' } # html5 data attributes
-        $b 'text', 'That is all'                                    # text nodes
+        $b 'li', text: "three", data: { stuff: 'abc', more: 'def' }
+        $b 'text', 'That is all'                                    
       ).asDOM()
-    # =>
+    
     # <ul id=​"container">​
     #   My <b>​awesome​</b>​ list
     #   <li id="first">​one​</li>​
