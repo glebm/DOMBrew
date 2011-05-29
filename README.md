@@ -31,10 +31,10 @@ The easiest way to install it is to grab dombrew.js from the repository.
     # </ul>​
 
 
-    # If at any point you want to get the html as a string:
-    # $b('#container').html() # => "<div id="container"></div>"
+    # To get html as a string:
+    $b('#container').html() 
+    # => "<div id="container"></div>"
 
-    # Review:
     # .append(...)           # => append children
     # .dom()  or .asDOM()    # => result as DOM
     # .html() or .asHTML()   # => result as html in a string
