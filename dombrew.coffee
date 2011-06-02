@@ -99,7 +99,9 @@ if !HTMLElement::innerText && HTMLElement::__defineGetter__? && HTMLElement::__d
   HTMLElement::__defineGetter__ "innerText", -> @textContent
   HTMLElement::__defineSetter__ "innerText", (value) -> @textContent = value
 
-
+# DocumentFragment constructor fix (Firefox)
+# Can't reference directly as DocumentFragment because IE does not expose it
+document.createDocumentFragment().constructor.name = "DocumentFragment"
 
 
 

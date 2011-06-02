@@ -166,4 +166,5 @@
       return this.textContent = value;
     });
   }
+  document.createDocumentFragment().constructor.name = "DocumentFragment";
 }).call(this);
