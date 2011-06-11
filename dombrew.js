@@ -1,8 +1,8 @@
 (function() {
-  var D, Node;
+  var D, H, Node, d;
+  d = document;
   Node = (function() {
-    var d, dotHashRe, flattenData, joinValues, parseElem;
-    d = document;
+    var dotHashRe, flattenData, joinValues, parseElem;
     flattenData = function(attr) {
       var name, val, _ref;
       if (!attr.data || typeof attr.data !== 'object') {
@@ -117,13 +117,13 @@
   this.DOMBrew = D = function() {
     var a, frag, node, nodes, _i, _len;
     a = arguments;
-    if ((typeof a[0])[0] === 'o' && 'splice' in a[0]) {
+    if ((typeof a[0]) === 'o' && 'splice' in a[0]) {
       nodes = a[0];
     } else if (a.length > 1 && (typeof a[1])[0] === 'o' && ('asDOM' in a[1])) {
       nodes = a;
     }
     if (nodes) {
-      frag = document.createDocumentFragment();
+      frag = d.createDocumentFragment();
       for (_i = 0, _len = nodes.length; _i < _len; _i++) {
         node = nodes[_i];
         frag.appendChild(node.e);
@@ -133,13 +133,13 @@
     return new Node(a[0], a[1]);
   };
   D.VERSION = D.version = '1.1';
-  if (!HTMLElement.prototype.innerText && (HTMLElement.prototype.__defineGetter__ != null) && (HTMLElement.prototype.__defineSetter__ != null)) {
-    HTMLElement.prototype.__defineGetter__("innerText", function() {
+  if ((H = HTMLElement) && !H.prototype.innerText && H.prototype.__defineGetter__ && H.prototype.__defineSetter__) {
+    H.prototype.__defineGetter__("innerText", function() {
       return this.textContent;
     });
-    HTMLElement.prototype.__defineSetter__("innerText", function(value) {
+    H.prototype.__defineSetter__("innerText", function(value) {
       return this.textContent = value;
     });
   }
-  document.createDocumentFragment().constructor.name = "DocumentFragment";
+  d.createDocumentFragment().constructor.name = "DocumentFragment";
 }).call(this);

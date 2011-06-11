@@ -4,9 +4,8 @@
 #    $x('strong', 'Hello'), $x('em', text: 'world!', class: ['important', 'stuff'])
 #  )
 # $x('div').append($x 'text', 'hi').append($x 'em', 'world').asHTML() => "<div>hi<em>world</em></div>"
+d = document
 class Node
-  d       = document
-
   flattenData = (attr) ->
     return if !attr.data || typeof attr.data != 'object'
     attr["data-#{name}"] = val for name, val of attr['data']
@@ -34,7 +33,7 @@ class Node
 
     elemType
 
-  # joinValues(['a', 'b', 'c', null, '', undefined, true, 1]) => "abctrue1"
+  # joinValues(['a', 'b', 'c', null, '', undefined, true, 1]) => "a b c true 1"
   # joinValues('a') => 'a'
   joinValues = (value) ->
     return value if typeof value != 'object'
@@ -78,12 +77,12 @@ Node::asHTML = Node::html
 @DOMBrew = D = ->
   a = arguments
   # If passed an array, wrap it in a DocumentFragment
-  if (typeof a[0])[0] == 'o' && 'splice' of a[0] # $b([nodes...]) form
+  if (typeof a[0]) == 'o' && 'splice' of a[0] # $b([nodes...]) form
     nodes = a[0]
   else if a.length > 1 && (typeof a[1])[0] == 'o' && ('asDOM' of a[1]) # $b(nodes...) form
     nodes = a
   if nodes
-    frag = document.createDocumentFragment()
+    frag = d.createDocumentFragment()
     frag.appendChild(node.e) for node in nodes
     a = [frag]
   new Node(a[0], a[1])
@@ -91,13 +90,13 @@ Node::asHTML = Node::html
 D.VERSION = D.version = '1.1'
 
 # innerText fix (Firefox)
-if !HTMLElement::innerText && HTMLElement::__defineGetter__? && HTMLElement::__defineSetter__?
-  HTMLElement::__defineGetter__ "innerText", -> @textContent
-  HTMLElement::__defineSetter__ "innerText", (value) -> @textContent = value
+if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSetter__
+  H::__defineGetter__ "innerText", -> @textContent
+  H::__defineSetter__ "innerText", (value) -> @textContent = value
 
 # DocumentFragment constructor fix (Firefox)
 # Can't reference directly as DocumentFragment because IE does not expose it
-document.createDocumentFragment().constructor.name = "DocumentFragment"
+d.createDocumentFragment().constructor.name = "DocumentFragment"
 
 
 
