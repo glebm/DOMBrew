@@ -1,0 +1,170 @@
+<html>
+<head>
+    <script src="dombrew.min.js" type="text/javascript"></script>
+    <style type="text/css">
+        body {
+            font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
+        }
+
+        td {
+            padding: 0.2em;
+        }
+    </style>
+</head>
+
+<body>
+<h1>DOMBrew</h1>
+
+<h2>Tests</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Runtime</th>
+    </tr>
+    </thead>
+    <tbody id="tests">
+
+    </tbody>
+</table>
+
+<h2>Benchmarks</h2>
+<button type="button" id="run-benchmarks">Run Benchmarks</button>
+<table>
+    <thead>
+    <tr>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Runtime</th>
+    </tr>
+    </thead>
+    <tbody id="benchmarks">
+
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    (function () {
+        var d = document, tests = d.getElementById('tests'), benchmarks = d.getElementById('benchmarks');
+
+        function newTd(text) {
+            var e = d.createElement('td');
+            ("innerText" in e) ? e.innerText = text : e.textContent = text;
+            return e;
+        }
+
+        function b(func) {
+            var start = +(new Date());
+            func();
+            return +(new Date()) - start;
+        }
+
+        function test(desc, func) {
+            setTimeout(function() {
+                var row = d.createElement('tr'), status, runtime = '-';
+                try {
+                    runtime = b(func);
+                    status = "OK"
+                } catch (e) {
+                    status = "Error!";
+                }
+                var descCol = newTd(desc), statusCol = newTd(status), runtimeCol = newTd(runtime + " ms");
+                statusCol.style.color = status == "OK" ? "green" : "red";
+                row.appendChild(descCol);
+                row.appendChild(statusCol);
+                row.appendChild(runtimeCol);
+                tests.appendChild(row);
+            });
+        }
+
+        var times = 10000;
+
+        var benchmarkFuncs = [];
+
+        function benchmark(desc, func) {
+            benchmarkFuncs.push(function() {
+                var row = d.createElement('tr'), status, runtime = '-';
+                try {
+                    var start = +(Date.now());
+                    for (var i = 0; i < times; i++) {
+                        func();
+                    }
+                    runtime = +(Date.now()) - start;
+                    status = "OK"
+                } catch (e) {
+                    status = "Error!";
+                }
+                var descCol = newTd(desc), statusCol = newTd(status),
+                        runtimeCol = newTd("" + runtime / times + " ms avg. (total: " + runtime + " ms)");
+                statusCol.style = status == "OK" ? "color:green;" : "color:red;font-weight:bold";
+                row.appendChild(descCol);
+                row.appendChild(statusCol);
+                row.appendChild(runtimeCol);
+                benchmarks.appendChild(row);
+            });
+        }
+
+        d.getElementById('run-benchmarks').onclick = function() {
+            for (var i = 0, len = benchmarkFuncs.length; i < len; i++) {
+                benchmarkFuncs[i]();
+            }
+        };
+
+        function assert(v) {
+            if (!v) throw "Assertion failed";
+        }
+
+        var $b = DOMBrew;
+        test("Text nodes: $b('text', 'hello world!')", function() {
+            assert($b('text', 'hello world!').html() == "hello world!")
+        });
+
+        test("Class / ID: $b(ul#list-1.class1.class2)", function() {
+            var dom = $b('ul#list-1.class1.class2').dom();
+            assert(dom.id == 'list-1' && dom.className == "class1 class2");
+        });
+
+        test(".append([$b(), $b()...]) many (array)", function() {
+            assert($b('ul').append([$b('li'), $b('li'), $b('li')]).html() == "<ul><li></li><li></li><li></li></ul>");
+        });
+
+        test(".append($b(), $b()...) many (vararg)", function() {
+            assert($b('ul').append($b('li'), $b('li'), $b('li')).html() == "<ul><li></li><li></li><li></li></ul>");
+        });
+
+        benchmark("Complex DOM (table with an inner table)", function() {
+            $b('table').append($b('tr#row-of-one').append([
+                $b('td.red').append(
+                        $b('ul').append(
+                                $b('li.lists', 'one'),
+                                $b('li', 'two')
+                                )
+                        ),
+                $b('td.blue').append(
+                        $b('p', 'This is a bunch of text that is right here.')
+                        ),
+
+                $b('td.orange').append(
+                        $b('table#smallertable').append(
+                            $b('thead').append(
+                                    $b('tr').append($b('th', { colspan: 2, text: 'this is small' }))
+                                    ),
+                            $b('tbody').append(
+                                    $b('tr').append(
+                                            $b('td', 'Go win.'),
+                                            $b('td', 'Go fight.')
+                                            )
+                                    )
+                        )
+                        ),
+
+                $b('td.purple').append($b('#divided', 'Content'))
+            ])).dom();
+        })
+    })();
+</script>
+
+</body>
+
+</html>
