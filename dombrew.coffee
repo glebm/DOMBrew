@@ -77,7 +77,7 @@ Node::asHTML = Node::html
 @DOMBrew = D = ->
   a = arguments
   # If passed an array, wrap it in a DocumentFragment
-  if (typeof a[0]) == 'o' && 'splice' of a[0] # $b([nodes...]) form
+  if (typeof a[0])[0] == 'o' && 'splice' of a[0] # $b([nodes...]) form
     nodes = a[0]
   else if a.length > 1 && (typeof a[1])[0] == 'o' && ('asDOM' of a[1]) # $b(nodes...) form
     nodes = a

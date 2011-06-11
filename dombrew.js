@@ -117,7 +117,7 @@
   this.DOMBrew = D = function() {
     var a, frag, node, nodes, _i, _len;
     a = arguments;
-    if ((typeof a[0]) === 'o' && 'splice' in a[0]) {
+    if ((typeof a[0])[0] === 'o' && 'splice' in a[0]) {
       nodes = a[0];
     } else if (a.length > 1 && (typeof a[1])[0] === 'o' && ('asDOM' in a[1])) {
       nodes = a;
