@@ -1,24 +1,8 @@
 (function() {
-  var Node;
-  var __hasProp = Object.prototype.hasOwnProperty, __slice = Array.prototype.slice;
+  var D, Node;
   Node = (function() {
-    var d, dotHashRe, flattenData, joinValues, name, parseElem, special, specials, v;
+    var d, dotHashRe, flattenData, joinValues, parseElem;
     d = document;
-    special = {
-      "class": 'className',
-      text: 'innerText',
-      html: 'innerHTML'
-    };
-    specials = (function() {
-      var _results;
-      _results = [];
-      for (name in special) {
-        if (!__hasProp.call(special, name)) continue;
-        v = special[name];
-        _results.push(name);
-      }
-      return _results;
-    })();
     flattenData = function(attr) {
       var name, val, _ref;
       if (!attr.data || typeof attr.data !== 'object') {
@@ -26,7 +10,6 @@
       }
       _ref = attr['data'];
       for (name in _ref) {
-        if (!__hasProp.call(_ref, name)) continue;
         val = _ref[name];
         attr["data-" + name] = val;
       }
@@ -39,33 +22,29 @@
         return elem;
       }
       attr['class'] || (attr['class'] = []);
-      if (attr['class'] && typeof attr['class'].splice === 'undefined') {
+      if (typeof attr['class'] === 'string') {
         attr['class'] = [attr['class']];
       }
-      classes = attr['class'];
       if (dotHashRe.test(elem[0])) {
         elem = "div" + elem;
       }
       pieces = elem.split(dotHashRe);
       elemType = pieces.shift();
       pos = elemType.length;
+      classes = attr['class'];
       for (_i = 0, _len = pieces.length; _i < _len; _i++) {
         piece = pieces[_i];
-        if (elem[pos] === '#') {
-          attr['id'] = piece;
-        } else if (elem[pos] === '.') {
-          classes.push(piece);
-        }
+        (elem[pos] === '#') && (attr['id'] = piece) || classes.push(piece);
         pos += piece.length + 1;
       }
-      if (!attr['class'] || attr['class'].length === 0) {
+      if (attr['class'].length === 0) {
         delete attr['class'];
       }
       return elemType;
     };
     joinValues = function(value) {
-      var piece, _ref;
-      if ((_ref = typeof value) === 'string' || _ref === 'number' || _ref === 'boolean') {
+      var piece;
+      if (typeof value !== 'object') {
         return value;
       }
       return ((function() {
@@ -81,7 +60,7 @@
       })()).join(' ');
     };
     function Node(elem, attr) {
-      var method, name, value, _i, _len;
+      var name, value;
       if (attr == null) {
         attr = {};
       }
@@ -101,34 +80,23 @@
         flattenData(attr);
         this.e = d.createElement(elem);
       }
-      for (name in special) {
-        if (!__hasProp.call(special, name)) continue;
-        method = special[name];
-        if (typeof (value = attr[name]) !== 'undefined') {
-          this.e[method] = joinValues(value);
-        }
-      }
-      for (_i = 0, _len = specials.length; _i < _len; _i++) {
-        name = specials[_i];
-        delete attr[name];
-      }
+      attr['class'] && (this.e.className = joinValues(attr['class'])) && delete attr['class'];
+      attr['text'] && (this.e.innerText = joinValues(attr['text'])) && delete attr['text'];
+      attr['html'] && (this.e.innerHTML = joinValues(attr['html'])) && delete attr['html'];
       for (name in attr) {
-        if (!__hasProp.call(attr, name)) continue;
         value = attr[name];
         this.e.setAttribute(name, value);
       }
     }
     Node.prototype.append = function() {
-      var children, node, _i, _len;
-      children = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (children.length === 1 && children[0] && typeof children[0].splice !== 'undefined') {
-        children = children[0];
+      var a, node, _i, _len;
+      a = arguments;
+      if ("splice" in a[0]) {
+        a = a[0];
       }
-      for (_i = 0, _len = children.length; _i < _len; _i++) {
-        node = children[_i];
-        if (node.asDOM != null) {
-          node = node.asDOM();
-        }
+      for (_i = 0, _len = a.length; _i < _len; _i++) {
+        node = a[_i];
+        ("asDOM" in node) && (node = node.asDOM());
         this.e.appendChild(node);
       }
       return this;
@@ -146,18 +114,25 @@
   })();
   Node.prototype.asDOM = Node.prototype.dom;
   Node.prototype.asHTML = Node.prototype.html;
-  this.DOMBrew = function(elem, attr) {
-    var frag, nodes;
-    if (typeof elem.splice !== 'undefined') {
-      nodes = new Node('div').append(elem).asDOM().childNodes;
-      frag = document.createDocumentFragment();
-      while (nodes.length) {
-        frag.appendChild(nodes[0]);
-      }
-      elem = frag;
+  this.DOMBrew = D = function() {
+    var a, frag, node, nodes, _i, _len;
+    a = arguments;
+    if ((typeof a[0])[0] === 'o' && 'splice' in a[0]) {
+      nodes = a[0];
+    } else if (a.length > 1 && (typeof a[1])[0] === 'o' && ('asDOM' in a[1])) {
+      nodes = a;
     }
-    return new Node(elem, attr);
+    if (nodes) {
+      frag = document.createDocumentFragment();
+      for (_i = 0, _len = nodes.length; _i < _len; _i++) {
+        node = nodes[_i];
+        frag.appendChild(node.e);
+      }
+      a = [frag];
+    }
+    return new Node(a[0], a[1]);
   };
+  D.VERSION = D.version = '1.1';
   if (!HTMLElement.prototype.innerText && (HTMLElement.prototype.__defineGetter__ != null) && (HTMLElement.prototype.__defineSetter__ != null)) {
     HTMLElement.prototype.__defineGetter__("innerText", function() {
       return this.textContent;

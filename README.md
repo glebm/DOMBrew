@@ -35,16 +35,37 @@ The easiest way to install it is to grab dombrew.js from the repository.
     $b('#container').html() 
     # => "<div id="container"></div>"
 
-    # .append(...)           # => append children
-    # .dom()  or .asDOM()    # => result as DOM
-    # .html() or .asHTML()   # => result as html in a string
+    # == Recap ==
+    #= Build nodes:
+    #  $b "a#my-id.some-class", "hello world!"
+    #  $b "#cont", class: ["cls1", "cls2"], data: { dat1: "hi", dat2: "hello" }
+    #  $b "text", "hello world!"
+    #  $b nodes...
+    #  $b [nodes...]
+    #= Append children:
+    #  .append children...
+    #  .append [children...]
+    #= Get results:
+    #  .dom()  or .asDOM()    # => result as DOM
+    #  .html() or .asHTML()   # => result as html in a string
 
 ---
 ## Contribute
 
-Fork. Develop. Extra points for tests. :)
+Fork. Develop. Extra points for tests (see test.html). :)
 
 You will need node and coffee-script installed:
 
 * Follow these instructions to install node and npm: https://github.com/joyent/node/wiki/Installation
 * npm install -g coffee-script
+
+# Changelog / What's new
+
+v1.1:
+* $b(nodes...) syntax
+* performance improvements
+* tests
+* 2.2 KB minified
+
+v1.0:
+Initial release
