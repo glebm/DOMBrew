@@ -62,10 +62,12 @@ You will need node and coffee-script installed:
 # Changelog / What's new
 
 v1.1:
+
 * $b(nodes...) syntax
 * performance improvements
 * tests
 * 2.2 KB minified
 
 v1.0:
+
 Initial release
