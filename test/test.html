@@ -132,6 +132,10 @@
             assert($b('text', 'hello world!').html() == "hello world!")
         });
 
+        test("$b('span', 'hello', data: {es: 'hola'})", function() {
+            assert($b('span', 'hello', {data: {es: 'hola'}}).html() == "<span data-es=\"hola\">hello</span>")
+        });
+
         test("$b('ul#list-1.class1.class2')", function() {
             var dom = $b('ul#list-1.class1.class2').dom();
             assert(dom.id == 'list-1' && dom.className == "class1 class2");
@@ -159,6 +163,16 @@
 
         test(".prepend(nodes...)", function() {
             assert($b('p').prepend($b('strong'), $b('span'), $b('em')).html() == "<p><em></em><span></span><strong></strong></p>");
+        });
+
+        test("$b('span', css: { display: 'none' })", function() {
+            assert(/style.*color.*red/.test($b('span', {css: { color: 'red' }}).html()));
+        });
+
+
+        test("$b(DOMElement).prepend($b('em'))", function() {
+            var $elem = $('<div><span></span></div>');
+            assert($b($elem[0]).prepend($b('em')).html() == "<div><em></em><span></span></div>");
         });
 
         test("$b.jQueryIntegrate(); jQuery($b(...))", function() {

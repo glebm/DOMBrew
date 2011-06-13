@@ -8,28 +8,32 @@ The easiest way to install it is to grab dombrew.js from the repository.
     $b = DOMBrew
 
     # Construct an element like this:
-    $b('span#the-span.classy', 'Hello World').asDOM()
+    $b('span#the-span.classy', 'Hello World').dom()
     # => <span id="the-span" class="classy">Hello World</span>
 
     # Or like this:
     $b('ul#container', html: 'My <b>awesome</b> list')
       .append(
         $b 'li#first', 'one'
-        $b 'li', 'two'
-        $b 'li', text: "three", data: { stuff: 'abc', more: 'def' }
+        $b 'li', 'two', css: { display: 'none' }
+        $b 'li', 'three', data: { stuff: 'abc', more: 'def' }
         $b 'text', 'That is all'                                    
-      ).asDOM()
+      ).dom()
     
     # <ul id=​"container">​
     #   My <b>​awesome​</b>​ list
     #   <li id="first">​one​</li>​
-    #   <li>​two​</li>​
+    #   <li style="display: none">​two​</li>​
     #   <li data-stuff=​"abc" data-more=​"def">
     #     ​three
     #   ​</li>​
     #   That is all
     # </ul>​
 
+    # Or build on the existing DOM element
+    $b($('#item-title')[0])
+      .prepend($b 'button.icon.fav-star', title: 'Add to favourites')
+      .append($b 'button.hide', 'Hide').dom()
 
     # To get html as a string:
     $b('#container').html() 
@@ -37,11 +41,11 @@ The easiest way to install it is to grab dombrew.js from the repository.
 
     # == Recap ==
     #= Build nodes:
-    #  $b "a#my-id.some-class", "hello world!"
+    #  $b "a#my-id.some-class", "hello world!", href: "/hello.html"
     #  $b "#cont", class: ["cls1", "cls2"], data: { dat1: "hi", dat2: "hello" }
     #  $b "text", "hello world!"
-    #  $b nodes...
-    #  $b [nodes...]
+    #  $b $("#my-elem")[0]
+    #  $b(nodes... or [nodes...])
     #= Append/prepend children:
     #  .append(children... or [children...])
     #  .prepend(children... or [children...])
@@ -64,6 +68,17 @@ You will need node and coffee-script installed:
 
 # Changelog / What's new
 
+v1.3:
+
+* css attribute support
+* $b(nodeName, test, attr) API
+* $b(DOMElement) API
+
+v1.2:
+
+* .prepend(children... or [children...])
+* experimental jQuery integration (opt-in)
+
 v1.1:
 
 * $b(nodes...) syntax
@@ -74,3 +89,8 @@ v1.1:
 v1.0:
 
 Initial release
+
+
+# Credits:
+
+* DOMBrew started off as a CoffeeScript rewrite of skyzyx's DOMBuilder https://github.com/skyzyx/dombuilder

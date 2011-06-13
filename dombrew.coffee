@@ -10,6 +10,7 @@ class Node
 
   dotHashRe = /[.#]/
 
+
   # Parses out css classes and id from string like:
   #   p#warning.big.yellow # => p   # attr will contain {"id": "warning", "class": ['big', 'yellow']}
   #   #container                # => div # attr will contain {"id": "container"}
@@ -36,16 +37,19 @@ class Node
     return value if typeof value != 'object'
     (piece for piece in value when piece).join(' ')
 
-  constructor: (elem, attr = {}) ->
-    # Cannot check 'elem.constructor == DocumentFragment' due to IE bug
-    if elem.constructor.name == "DocumentFragment"
+  constructor: (elem, attr = {}, more) ->
+    if elem.nodeType
       @e = elem
       return
     else if elem == 'text'
       @e = d.createTextNode attr
       return
     else
-      attr = {text: attr} if typeof attr == "string"
+      if typeof attr == "string"
+        more ||= {}
+        more.text = attr
+        attr = more
+
       elem = parseElem(elem, attr)
       flattenData(attr)
       @e = d.createElement elem
@@ -53,6 +57,7 @@ class Node
     attr['class'] && (@e.className = joinValues(attr['class'])) && delete attr['class']
     attr['text'] && (@e.innerText = joinValues(attr['text'])) && delete attr['text']
     attr['html'] && (@e.innerHTML = joinValues(attr['html'])) && delete attr['html']
+    (s[prop] = value for prop, value of css) if attr['css'] && (s = @e.style) && (css = attr['css']) && delete attr['css']
 
     @e.setAttribute(name, value) for name, value of attr
 
@@ -94,24 +99,20 @@ Node::asHTML = Node::html
     frag = d.createDocumentFragment()
     frag.appendChild(node.e) for node in nodes
     a = [frag]
-  new Node(a[0], a[1])
+  new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.2'
+D.VERSION = D.version = '1.3'
 
 # innerText fix (Firefox)
 if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSetter__
   H::__defineGetter__ "innerText", -> @textContent
   H::__defineSetter__ "innerText", (value) -> @textContent = value
 
-# DocumentFragment constructor fix (Firefox)
-# Can't reference directly as DocumentFragment because IE does not expose it
-d.createDocumentFragment().constructor.name = "DocumentFragment"
-
 # == jQuery integration ==
 D.jQueryIntegrate = ->
   return if !(_jq = jQuery)
   window.jQuery = (selector, context) ->
-    selector = selector.e if selector['DOMBrew']
+    selector = selector.e if selector && selector['DOMBrew']
     _jq(selector, context)
   window.$ = jQuery if $ == _jq
   D.jQueryIntegrate = jQuery.noop

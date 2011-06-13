@@ -59,12 +59,12 @@
         return _results;
       })()).join(' ');
     };
-    function Node(elem, attr) {
-      var name, value;
+    function Node(elem, attr, more) {
+      var css, name, prop, s, value;
       if (attr == null) {
         attr = {};
       }
-      if (elem.constructor.name === "DocumentFragment") {
+      if (elem.nodeType) {
         this.e = elem;
         return;
       } else if (elem === 'text') {
@@ -72,9 +72,9 @@
         return;
       } else {
         if (typeof attr === "string") {
-          attr = {
-            text: attr
-          };
+          more || (more = {});
+          more.text = attr;
+          attr = more;
         }
         elem = parseElem(elem, attr);
         flattenData(attr);
@@ -83,6 +83,12 @@
       attr['class'] && (this.e.className = joinValues(attr['class'])) && delete attr['class'];
       attr['text'] && (this.e.innerText = joinValues(attr['text'])) && delete attr['text'];
       attr['html'] && (this.e.innerHTML = joinValues(attr['html'])) && delete attr['html'];
+      if (attr['css'] && (s = this.e.style) && (css = attr['css']) && delete attr['css']) {
+        for (prop in css) {
+          value = css[prop];
+          s[prop] = value;
+        }
+      }
       for (name in attr) {
         value = attr[name];
         this.e.setAttribute(name, value);
@@ -144,9 +150,9 @@
       }
       a = [frag];
     }
-    return new Node(a[0], a[1]);
+    return new Node(a[0], a[1], a[2]);
   };
-  D.VERSION = D.version = '1.2';
+  D.VERSION = D.version = '1.3';
   if ((H = HTMLElement) && !H.prototype.innerText && H.prototype.__defineGetter__ && H.prototype.__defineSetter__) {
     H.prototype.__defineGetter__("innerText", function() {
       return this.textContent;
@@ -155,14 +161,13 @@
       return this.textContent = value;
     });
   }
-  d.createDocumentFragment().constructor.name = "DocumentFragment";
   D.jQueryIntegrate = function() {
     var _jq;
     if (!(_jq = jQuery)) {
       return;
     }
     window.jQuery = function(selector, context) {
-      if (selector['DOMBrew']) {
+      if (selector && selector['DOMBrew']) {
         selector = selector.e;
       }
       return _jq(selector, context);
