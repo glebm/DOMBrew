@@ -101,6 +101,20 @@
       }
       return this;
     };
+    Node.prototype.prepend = function() {
+      var a, node, _i, _len;
+      a = arguments;
+      if ("splice" in a[0]) {
+        a = a[0];
+      }
+      for (_i = 0, _len = a.length; _i < _len; _i++) {
+        node = a[_i];
+        ("asDOM" in node) && (node = node.asDOM());
+        this.e.insertBefore(node, this.e.firstChild);
+      }
+      return this;
+    };
+    Node.prototype.DOMBrew = true;
     Node.prototype.dom = function() {
       return this.e;
     };
@@ -132,7 +146,7 @@
     }
     return new Node(a[0], a[1]);
   };
-  D.VERSION = D.version = '1.1';
+  D.VERSION = D.version = '1.2';
   if ((H = HTMLElement) && !H.prototype.innerText && H.prototype.__defineGetter__ && H.prototype.__defineSetter__) {
     H.prototype.__defineGetter__("innerText", function() {
       return this.textContent;
@@ -142,4 +156,20 @@
     });
   }
   d.createDocumentFragment().constructor.name = "DocumentFragment";
+  D.jQueryIntegrate = function() {
+    var _jq;
+    if (!(_jq = jQuery)) {
+      return;
+    }
+    window.jQuery = function(selector, context) {
+      if (selector['DOMBrew']) {
+        selector = selector.e;
+      }
+      return _jq(selector, context);
+    };
+    if ($ === _jq) {
+      window.$ = jQuery;
+    }
+    return D.jQueryIntegrate = jQuery.noop;
+  };
 }).call(this);

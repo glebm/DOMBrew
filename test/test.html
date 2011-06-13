@@ -1,6 +1,7 @@
 <html>
 <head>
-    <script src="dombrew.js" type="text/javascript"></script>
+    <script src="../dombrew.js" type="text/javascript"></script>
+    <script src="jquery-1.6.1.js" type="text/javascript"></script>
     <style type="text/css">
         body {
             font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif;
@@ -150,6 +151,19 @@
 
         test(".append(nodes...)", function() {
             assert($b('ul').append($b('li'), $b('li'), $b('li')).html() == "<ul><li></li><li></li><li></li></ul>");
+        });
+
+        test(".prepend([nodes...])", function() {
+            assert($b('p').prepend([$b('strong'), $b('span'), $b('em')]).html() == "<p><em></em><span></span><strong></strong></p>");
+        });
+
+        test(".prepend(nodes...)", function() {
+            assert($b('p').prepend($b('strong'), $b('span'), $b('em')).html() == "<p><em></em><span></span><strong></strong></p>");
+        });
+
+        test("$b.jQueryIntegrate(); jQuery($b(...))", function() {
+            $b.jQueryIntegrate();
+            assert($($b("ul").append($b("li.testClass"))).find('li.testClass').length == 1)
         });
 
         benchmark("Complex DOM (table with an inner table)", 5000, function() {

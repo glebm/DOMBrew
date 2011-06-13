@@ -1,9 +1,6 @@
-#  Awesomely fast
-#  $x = DOMBrew
-#  $x('p', text: "DOMBrew says: ").append(
-#    $x('strong', 'Hello'), $x('em', text: 'world!', class: ['important', 'stuff'])
-#  )
-# $x('div').append($x 'text', 'hi').append($x 'em', 'world').asHTML() => "<div>hi<em>world</em></div>"
+# DOMBrew builds DOM from a css like selector and a hash of attributes.
+# @url https://github.com/glebm/DOMBrew
+# @author Gleb Mazovetskiy
 d = document
 class Node
   flattenData = (attr) ->
@@ -68,6 +65,18 @@ class Node
       @e.appendChild node
     @
 
+  # prepend(children...)
+  prepend: ->
+    a = arguments
+    a = a[0] if "splice" of a[0]
+    for node in a
+      ("asDOM" of node) && (node = node.asDOM())
+      @e.insertBefore(node, @e.firstChild)
+    @
+
+  # Identification property
+  DOMBrew: true
+
   dom  : -> @e
   html : -> div = d.createElement('div'); div.appendChild(@e); div.innerHTML
 
@@ -87,7 +96,7 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1])
 
-D.VERSION = D.version = '1.1'
+D.VERSION = D.version = '1.2'
 
 # innerText fix (Firefox)
 if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSetter__
@@ -98,8 +107,14 @@ if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSette
 # Can't reference directly as DocumentFragment because IE does not expose it
 d.createDocumentFragment().constructor.name = "DocumentFragment"
 
-
-
+# == jQuery integration ==
+D.jQueryIntegrate = ->
+  return if !(_jq = jQuery)
+  window.jQuery = (selector, context) ->
+    selector = selector.e if selector['DOMBrew']
+    _jq(selector, context)
+  window.$ = jQuery if $ == _jq
+  D.jQueryIntegrate = jQuery.noop
 
 
 

@@ -42,9 +42,12 @@ The easiest way to install it is to grab dombrew.js from the repository.
     #  $b "text", "hello world!"
     #  $b nodes...
     #  $b [nodes...]
-    #= Append children:
-    #  .append children...
-    #  .append [children...]
+    #= Append/prepend children:
+    #  .append(children... or [children...])
+    #  .prepend(children... or [children...])
+    #= Integrate with jQuery (experimental)
+    #  1. Call $b.jQueryIntegrate() to enable full jQuery integration
+    #  2. jQuery($b 'li.awesome').is('.awesome') #=> true
     #= Get results:
     #  .dom()  or .asDOM()    # => result as DOM
     #  .html() or .asHTML()   # => result as html in a string
