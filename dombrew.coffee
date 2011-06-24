@@ -3,17 +3,22 @@
 # @author Gleb Mazovetskiy
 d = document
 class Node
-  flattenData = (attr) ->
-    return if !attr.data || typeof attr.data != 'object'
-    attr["data-#{name}"] = val for name, val of attr['data']
-    delete attr['data']
+  # Identification property
+  _brew: 1
 
-  dotHashRe = /[.#]/
-
+  # {data: {someProp: 1}} => {"data-some-prop" => 1}
+  flattenHash = (attr) ->
+    for name, obj of attr
+      if typeof attr[name] == 'object'
+        attr[name + '-' + sub.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase()] = val for sub, val of obj
+        delete attr[name]
+    return
 
   # Parses out css classes and id from string like:
   #   p#warning.big.yellow # => p   # attr will contain {"id": "warning", "class": ['big', 'yellow']}
   #   #container                # => div # attr will contain {"id": "container"}
+  # @returns node name (e.g. "span")
+  dotHashRe = /[.#]/
   parseElem = (elem, attr) ->
     return elem unless dotHashRe.test elem
     attr['class'] ||= []
@@ -26,9 +31,7 @@ class Node
     for piece in pieces
       (elem[pos] == '#') && (attr['id'] = piece) || classes.push(piece)
       pos += piece.length + 1
-
-    delete attr['class'] if attr['class'].length == 0
-
+    delete attr['class'] unless attr['class'].length
     elemType
 
   # joinValues(['a', 'b', 'c', null, '', undefined, true, 1]) => "a b c true 1"
@@ -36,8 +39,10 @@ class Node
   joinValues = (value) ->
     return value if typeof value != 'object'
     (piece for piece in value when piece).join(' ')
+    return
 
-  constructor: (elem, attr = {}, more) ->
+  constructor: (elem, attr, more) ->
+    attr ||= {}
     if elem.nodeType
       @e = elem
       return
@@ -50,37 +55,33 @@ class Node
         more.text = attr
         attr = more
 
-      elem = parseElem(elem, attr)
-      flattenData(attr)
-      @e = d.createElement elem
+      @e = d.createElement parseElem(elem, attr)
 
     attr['class'] && (@e.className = joinValues(attr['class'])) && delete attr['class']
     attr['text'] && (@e.innerText = joinValues(attr['text'])) && delete attr['text']
     attr['html'] && (@e.innerHTML = joinValues(attr['html'])) && delete attr['html']
     (s[prop] = value for prop, value of css) if attr['css'] && (s = @e.style) && (css = attr['css']) && delete attr['css']
 
+    flattenHash(attr)
     @e.setAttribute(name, value) for name, value of attr
 
-  # append(children...)
+  # append(children... or [children])
   append: ->
     a = arguments
     a = a[0] if "splice" of a[0]
     for node in a
-      ("asDOM" of node) && (node = node.asDOM())
+      ('_brew' of node) && (node = node.dom())
       @e.appendChild node
     @
 
-  # prepend(children...)
+  # prepend(children... or [children])
   prepend: ->
     a = arguments
     a = a[0] if "splice" of a[0]
     for node in a
-      ("asDOM" of node) && (node = node.asDOM())
+      ('_brew' of node) && (node = node.dom())
       @e.insertBefore(node, @e.firstChild)
     @
-
-  # Identification property
-  DOMBrew: true
 
   dom  : -> @e
   html : -> div = d.createElement('div'); div.appendChild(@e); div.innerHTML
@@ -88,12 +89,13 @@ class Node
 Node::asDOM  = Node::dom
 Node::asHTML = Node::html
 
+# DOMbrew(nodes... or [nodes])
 @DOMBrew = D = ->
   a = arguments
   # If passed an array, wrap it in a DocumentFragment
   if (typeof a[0])[0] == 'o' && 'splice' of a[0] # $b([nodes...]) form
     nodes = a[0]
-  else if a.length > 1 && (typeof a[1])[0] == 'o' && ('asDOM' of a[1]) # $b(nodes...) form
+  else if a.length > 1 && (typeof a[1])[0] == 'o' && ('_brew' of a[1]) # $b(nodes...) form
     nodes = a
   if nodes
     frag = d.createDocumentFragment()
@@ -101,21 +103,12 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.3'
+D.VERSION = D.version = '1.4'
 
 # innerText fix (Firefox)
 if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSetter__
   H::__defineGetter__ "innerText", -> @textContent
   H::__defineSetter__ "innerText", (value) -> @textContent = value
-
-# == jQuery integration ==
-D.jQueryIntegrate = ->
-  return if !(_jq = jQuery)
-  window.jQuery = (selector, context) ->
-    selector = selector.e if selector && selector['DOMBrew']
-    _jq(selector, context)
-  window.$ = jQuery if $ == _jq
-  D.jQueryIntegrate = jQuery.noop
 
 
 

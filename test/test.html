@@ -175,11 +175,6 @@
             assert($b($elem[0]).prepend($b('em')).html() == "<div><em></em><span></span></div>");
         });
 
-        test("$b.jQueryIntegrate(); jQuery($b(...))", function() {
-            $b.jQueryIntegrate();
-            assert($($b("ul").append($b("li.testClass"))).find('li.testClass').length == 1)
-        });
-
         benchmark("Complex DOM (table with an inner table)", 5000, function() {
             $b('table').append($b('tr#row-of-one').append([
                 $b('td.red').append(

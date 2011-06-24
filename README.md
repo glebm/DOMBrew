@@ -14,47 +14,49 @@ The easiest way to install it is to grab dombrew.js from the repository.
     # Or like this:
     $b('ul#container', html: 'My <b>awesome</b> list')
       .append(
-        $b 'li#first', 'one'
-        $b 'li', 'two', css: { display: 'none' }
-        $b 'li', 'three', data: { stuff: 'abc', more: 'def' }
-        $b 'text', 'That is all'                                    
+        $b 'li#first', 'One'
+        $b 'li', 'Two', data: { someProp: 'abc', otherProp: 'def' }
+        $b 'li', 'Three', css: { display: 'none' }
+        $b 'text', 'That is all'
       ).dom()
     
     # <ul id=​"container">​
     #   My <b>​awesome​</b>​ list
-    #   <li id="first">​one​</li>​
-    #   <li style="display: none">​two​</li>​
-    #   <li data-stuff=​"abc" data-more=​"def">
-    #     ​three
+    #   <li id="first">
+    #     ​One​
+    #   </li>​
+    #   <li data-some-prop=​"abc" data-other-prop=​"def">
+    #     Two
     #   ​</li>​
+    #   <li style="display: none">​
+    #     Three​
+    #   </li>​
     #   That is all
     # </ul>​
 
     # Or build on the existing DOM element
     $b($('#item-title')[0])
       .prepend($b 'button.icon.fav-star', title: 'Add to favourites')
-      .append($b 'button.hide', 'Hide').dom()
+      .append($b 'button.hide', 'Hide')
 
     # To get html as a string:
     $b('#container').html() 
     # => "<div id="container"></div>"
 
-    # == Recap ==
+    # == TL;DR: ==
     #= Build nodes:
     #  $b "a#my-id.some-class", "hello world!", href: "/hello.html"
-    #  $b "#cont", class: ["cls1", "cls2"], data: { dat1: "hi", dat2: "hello" }
-    #  $b "text", "hello world!"
-    #  $b $("#my-elem")[0]
-    #  $b(nodes... or [nodes...])
+    #  $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
+    #  $b "text", "hello world!" # <- to build a text node
     #= Append/prepend children:
     #  .append(children... or [children...])
     #  .prepend(children... or [children...])
-    #= Integrate with jQuery (experimental)
-    #  1. Call $b.jQueryIntegrate() to enable full jQuery integration
-    #  2. jQuery($b 'li.awesome').is('.awesome') #=> true
+    #= Access existing nodes as a DOMBrew object:
+    #  $b document.getElementById("my-elem") # <- 1 DOM node
+    #  $b(nodes... or [nodes...])            # <- wrap multiple DOMBrew nodes (uses awesome DocumentFragment internally)
     #= Get results:
-    #  .dom()  or .asDOM()    # => result as DOM
-    #  .html() or .asHTML()   # => result as html in a string
+    #  .dom()   # => result as DOM
+    #  .html()  # => result as html in a string
 
 ---
 ## Contribute
@@ -67,6 +69,13 @@ You will need node and coffee-script installed:
 * npm install -g coffee-script
 
 # Changelog / What's new
+
+v1.4:
+* Complete support for data attributes ( { data: {someProp: "x"} } => (data-some-prop="x") )
+* Deprecated: .asDOM() and .asHTML()
+* Removed: experimental jQueryIntegrate
+* Default minifier changed to UglifyJS (from Google Closure)
+* Documentation update
 
 v1.3:
 
@@ -89,7 +98,6 @@ v1.1:
 v1.0:
 
 Initial release
-
 
 # Credits:
 
