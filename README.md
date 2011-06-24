@@ -71,6 +71,7 @@ You will need node and coffee-script installed:
 # Changelog / What's new
 
 v1.4:
+
 * Complete support for data attributes ( { data: {someProp: "x"} } => (data-some-prop="x") )
 * Deprecated: .asDOM() and .asHTML()
 * Removed: experimental jQueryIntegrate
