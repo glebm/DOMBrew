@@ -69,6 +69,8 @@ You will need node and coffee-script installed:
 * npm install -g coffee-script
 
 # Changelog / What's new
+v1.4.1:
+* IE7 $b(nodes...) fix
 
 v1.4:
 

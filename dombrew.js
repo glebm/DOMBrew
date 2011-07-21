@@ -35,7 +35,7 @@ Node = (function() {
     classes = attr['class'];
     for (_i = 0, _len = pieces.length; _i < _len; _i++) {
       piece = pieces[_i];
-      (elem[pos] === '#') && (attr['id'] = piece) || classes.push(piece);
+      (elem.charAt(pos) === '#') && (attr['id'] = piece) || classes.push(piece);
       pos += piece.length + 1;
     }
     if (!attr['class'].length) {
@@ -44,21 +44,19 @@ Node = (function() {
     return elemType;
   };
   joinValues = function(value) {
-    var piece;
+    var i, length, r;
     if (typeof value !== 'object') {
       return value;
     }
-    ((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = value.length; _i < _len; _i++) {
-        piece = value[_i];
-        if (piece) {
-          _results.push(piece);
-        }
+    r = [];
+    i = -1;
+    length = value.length;
+    while (++i < length) {
+      if (value[i]) {
+        r.push(value[i]);
       }
-      return _results;
-    })()).join(' ');
+    }
+    return r.join(' ');
   };
   function Node(elem, attr, more) {
     var css, name, prop, s, value;
@@ -134,9 +132,9 @@ Node.prototype.asHTML = Node.prototype.html;
 this.DOMBrew = D = function() {
   var a, frag, node, nodes, _i, _len;
   a = arguments;
-  if ((typeof a[0])[0] === 'o' && 'splice' in a[0]) {
+  if ((typeof a[0] === 'object') && ('splice' in a[0])) {
     nodes = a[0];
-  } else if (a.length > 1 && (typeof a[1])[0] === 'o' && ('_brew' in a[1])) {
+  } else if (a.length > 1 && (typeof a[1] === 'object') && ('_brew' in a[1])) {
     nodes = a;
   }
   if (nodes) {
@@ -149,7 +147,7 @@ this.DOMBrew = D = function() {
   }
   return new Node(a[0], a[1], a[2]);
 };
-D.VERSION = D.version = '1.4';
+D.VERSION = D.version = '1.4.1';
 if ((H = HTMLElement) && !H.prototype.innerText && H.prototype.__defineGetter__ && H.prototype.__defineSetter__) {
   H.prototype.__defineGetter__("innerText", function() {
     return this.textContent;

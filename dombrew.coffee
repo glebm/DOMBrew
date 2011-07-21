@@ -29,7 +29,7 @@ class Node
     pos      = elemType.length
     classes  = attr['class']
     for piece in pieces
-      (elem[pos] == '#') && (attr['id'] = piece) || classes.push(piece)
+      (elem.charAt(pos) == '#') && (attr['id'] = piece) || classes.push(piece)
       pos += piece.length + 1
     delete attr['class'] unless attr['class'].length
     elemType
@@ -38,8 +38,13 @@ class Node
   # joinValues('a') => 'a'
   joinValues = (value) ->
     return value if typeof value != 'object'
-    (piece for piece in value when piece).join(' ')
-    return
+    r = []
+    i = -1
+    length = value.length
+    while (++i < length)
+      r.push(value[i]) if value[i]
+    r.join(' ')
+
 
   constructor: (elem, attr, more) ->
     attr ||= {}
@@ -93,9 +98,9 @@ Node::asHTML = Node::html
 @DOMBrew = D = ->
   a = arguments
   # If passed an array, wrap it in a DocumentFragment
-  if (typeof a[0])[0] == 'o' && 'splice' of a[0] # $b([nodes...]) form
+  if (typeof a[0] == 'object') && ('splice' of a[0]) # $b([nodes...]) form
     nodes = a[0]
-  else if a.length > 1 && (typeof a[1])[0] == 'o' && ('_brew' of a[1]) # $b(nodes...) form
+  else if a.length > 1 && (typeof a[1] == 'object') && ('_brew' of a[1]) # $b(nodes...) form
     nodes = a
   if nodes
     frag = d.createDocumentFragment()
@@ -103,7 +108,7 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4'
+D.VERSION = D.version = '1.4.1'
 
 # innerText fix (Firefox)
 if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSetter__
