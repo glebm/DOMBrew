@@ -47,7 +47,7 @@ class Node
 
 
   constructor: (elem, attr, more) ->
-    attr ||= {}
+    attr = {} if !attr?
     if elem.nodeType
       @e = elem
       return

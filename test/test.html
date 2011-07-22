@@ -132,6 +132,10 @@
             assert($b('text', 'hello world!').html() == "hello world!")
         });
 
+        test ("$b('text', '')", function() {
+            assert($b('text', '').html() == '')
+        });
+
         test("$b('span', 'hello', data: {es: 'hola'})", function() {
             assert($b('span', 'hello', {data: {es: 'hola'}}).html() == "<span data-es=\"hola\">hello</span>")
         });

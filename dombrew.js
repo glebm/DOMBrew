@@ -60,7 +60,9 @@ Node = (function() {
   };
   function Node(elem, attr, more) {
     var css, name, prop, s, value;
-    attr || (attr = {});
+    if (!(attr != null)) {
+      attr = {};
+    }
     if (elem.nodeType) {
       this.e = elem;
       return;
