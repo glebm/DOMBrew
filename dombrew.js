@@ -1,4 +1,4 @@
-var D, H, Node, d;
+var D, Node, d;
 d = document;
 Node = (function() {
   var dotHashRe, flattenHash, joinValues, parseElem;
@@ -147,12 +147,12 @@ this.DOMBrew = D = function() {
   }
   return new Node(a[0], a[1], a[2]);
 };
-D.VERSION = D.version = '1.4.1';
-if ((H = HTMLElement) && !H.prototype.innerText && H.prototype.__defineGetter__ && H.prototype.__defineSetter__) {
-  H.prototype.__defineGetter__("innerText", function() {
+D.VERSION = D.version = '1.4.2';
+if ((navigator.appName !== 'Microsoft Internet Explorer') && !HTMLElement.prototype.innerText && HTMLElement.prototype.__defineGetter__) {
+  HTMLElement.prototype.__defineGetter__("innerText", function() {
     return this.textContent;
   });
-  H.prototype.__defineSetter__("innerText", function(value) {
+  HTMLElement.prototype.__defineSetter__("innerText", function(value) {
     return this.textContent = value;
   });
 }

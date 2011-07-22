@@ -108,12 +108,12 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4.1'
+D.VERSION = D.version = '1.4.2'
 
 # innerText fix (Firefox)
-if (H = HTMLElement) && !H::innerText && H::__defineGetter__ && H::__defineSetter__
-  H::__defineGetter__ "innerText", -> @textContent
-  H::__defineSetter__ "innerText", (value) -> @textContent = value
+if (navigator.appName != 'Microsoft Internet Explorer') && !HTMLElement::innerText && HTMLElement::__defineGetter__
+  HTMLElement::__defineGetter__ "innerText", -> @textContent
+  HTMLElement::__defineSetter__ "innerText", (value) -> @textContent = value
 
 
 
