@@ -23,7 +23,7 @@ class Node
     return elem unless dotHashRe.test elem
     attr['class'] ||= []
     attr['class'] = [attr['class']] if typeof attr['class'] == 'string'
-    elem     = "div#{elem}" if dotHashRe.test(elem[0])
+    elem     = "div#{elem}" if dotHashRe.test(elem.charAt(0))
     pieces   = elem.split(dotHashRe)
     elemType = pieces.shift()
     pos      = elemType.length
