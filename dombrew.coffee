@@ -29,7 +29,10 @@ class Node
     pos      = elemType.length
     classes  = attr['class']
     for piece in pieces
-      (elem.charAt(pos) == '#') && (attr['id'] = piece) || classes.push(piece)
+      if elem.charAt(pos) == '#'
+        attr['id'] = piece
+      else
+        classes.push(piece)
       pos += piece.length + 1
     delete attr['class'] unless attr['class'].length
     elemType
@@ -108,7 +111,7 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4.2'
+D.VERSION = D.version = '1.4.3'
 
 # innerText fix (Firefox)
 if (navigator.appName != 'Microsoft Internet Explorer') && !HTMLElement::innerText && HTMLElement::__defineGetter__

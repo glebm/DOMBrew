@@ -70,6 +70,10 @@ You will need node and coffee-script installed:
 
 # Changelog / What's new
 
+v1.4.3:
+
+* more IE compat
+
 v1.4.2:
 
 * IE6 compat

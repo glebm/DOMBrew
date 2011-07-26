@@ -26,7 +26,7 @@ Node = (function() {
     if (typeof attr['class'] === 'string') {
       attr['class'] = [attr['class']];
     }
-    if (dotHashRe.test(elem[0])) {
+    if (dotHashRe.test(elem.charAt(0))) {
       elem = "div" + elem;
     }
     pieces = elem.split(dotHashRe);
@@ -35,7 +35,11 @@ Node = (function() {
     classes = attr['class'];
     for (_i = 0, _len = pieces.length; _i < _len; _i++) {
       piece = pieces[_i];
-      (elem.charAt(pos) === '#') && (attr['id'] = piece) || classes.push(piece);
+      if (elem.charAt(pos) === '#') {
+        attr['id'] = piece;
+      } else {
+        classes.push(piece);
+      }
       pos += piece.length + 1;
     }
     if (!attr['class'].length) {
@@ -149,7 +153,7 @@ this.DOMBrew = D = function() {
   }
   return new Node(a[0], a[1], a[2]);
 };
-D.VERSION = D.version = '1.4.2';
+D.VERSION = D.version = '1.4.3';
 if ((navigator.appName !== 'Microsoft Internet Explorer') && !HTMLElement.prototype.innerText && HTMLElement.prototype.__defineGetter__) {
   HTMLElement.prototype.__defineGetter__("innerText", function() {
     return this.textContent;
