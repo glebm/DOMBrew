@@ -1,8 +1,12 @@
 var D, Node, d;
+
 d = document;
+
 Node = (function() {
   var dotHashRe, flattenHash, joinValues, parseElem;
+
   Node.prototype._brew = 1;
+
   flattenHash = function(attr) {
     var name, obj, sub, val;
     for (name in attr) {
@@ -16,19 +20,15 @@ Node = (function() {
       }
     }
   };
+
   dotHashRe = /[.#]/;
+
   parseElem = function(elem, attr) {
     var classes, elemType, piece, pieces, pos, _i, _len;
-    if (!dotHashRe.test(elem)) {
-      return elem;
-    }
+    if (!dotHashRe.test(elem)) return elem;
     attr['class'] || (attr['class'] = []);
-    if (typeof attr['class'] === 'string') {
-      attr['class'] = [attr['class']];
-    }
-    if (dotHashRe.test(elem.charAt(0))) {
-      elem = "div" + elem;
-    }
+    if (typeof attr['class'] === 'string') attr['class'] = [attr['class']];
+    if (dotHashRe.test(elem.charAt(0))) elem = "div" + elem;
     pieces = elem.split(dotHashRe);
     elemType = pieces.shift();
     pos = elemType.length;
@@ -42,31 +42,25 @@ Node = (function() {
       }
       pos += piece.length + 1;
     }
-    if (!attr['class'].length) {
-      delete attr['class'];
-    }
+    if (!attr['class'].length) delete attr['class'];
     return elemType;
   };
+
   joinValues = function(value) {
     var i, length, r;
-    if (typeof value !== 'object') {
-      return value;
-    }
+    if (typeof value !== 'object') return value;
     r = [];
     i = -1;
     length = value.length;
     while (++i < length) {
-      if (value[i]) {
-        r.push(value[i]);
-      }
+      if (value[i]) r.push(value[i]);
     }
     return r.join(' ');
   };
+
   function Node(elem, attr, more) {
     var css, name, prop, s, value;
-    if (!(attr != null)) {
-      attr = {};
-    }
+    if (!(attr != null)) attr = {};
     if (elem.nodeType) {
       this.e = elem;
       return;
@@ -96,12 +90,11 @@ Node = (function() {
       this.e.setAttribute(name, value);
     }
   }
+
   Node.prototype.append = function() {
     var a, node, _i, _len;
     a = arguments;
-    if ("splice" in a[0]) {
-      a = a[0];
-    }
+    if ("splice" in a[0]) a = a[0];
     for (_i = 0, _len = a.length; _i < _len; _i++) {
       node = a[_i];
       ('_brew' in node) && (node = node.dom());
@@ -109,12 +102,11 @@ Node = (function() {
     }
     return this;
   };
+
   Node.prototype.prepend = function() {
     var a, node, _i, _len;
     a = arguments;
-    if ("splice" in a[0]) {
-      a = a[0];
-    }
+    if ("splice" in a[0]) a = a[0];
     for (_i = 0, _len = a.length; _i < _len; _i++) {
       node = a[_i];
       ('_brew' in node) && (node = node.dom());
@@ -122,19 +114,26 @@ Node = (function() {
     }
     return this;
   };
+
   Node.prototype.dom = function() {
     return this.e;
   };
+
   Node.prototype.html = function() {
     var div;
     div = d.createElement('div');
     div.appendChild(this.e);
     return div.innerHTML;
   };
+
   return Node;
+
 })();
+
 Node.prototype.asDOM = Node.prototype.dom;
+
 Node.prototype.asHTML = Node.prototype.html;
+
 this.DOMBrew = D = function() {
   var a, frag, node, nodes, _i, _len;
   a = arguments;
@@ -147,13 +146,15 @@ this.DOMBrew = D = function() {
     frag = d.createDocumentFragment();
     for (_i = 0, _len = nodes.length; _i < _len; _i++) {
       node = nodes[_i];
-      frag.appendChild(node.e);
+      frag.appendChild(node.e ? node.e : node);
     }
     a = [frag];
   }
   return new Node(a[0], a[1], a[2]);
 };
-D.VERSION = D.version = '1.4.3';
+
+D.VERSION = D.version = '1.4.4';
+
 if ((navigator.appName !== 'Microsoft Internet Explorer') && !HTMLElement.prototype.innerText && HTMLElement.prototype.__defineGetter__) {
   HTMLElement.prototype.__defineGetter__("innerText", function() {
     return this.textContent;

@@ -107,11 +107,11 @@ Node::asHTML = Node::html
     nodes = a
   if nodes
     frag = d.createDocumentFragment()
-    frag.appendChild(node.e) for node in nodes
+    frag.appendChild(if node.e then node.e else node) for node in nodes
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4.3'
+D.VERSION = D.version = '1.4.4'
 
 # innerText fix (Firefox)
 if (navigator.appName != 'Microsoft Internet Explorer') && !HTMLElement::innerText && HTMLElement::__defineGetter__

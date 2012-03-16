@@ -153,6 +153,10 @@
             assert($b($b('text', 'hello '), $b('em', 'world!')).html() == 'hello <em>world!</em>')
         });
 
+        test("$b(dombrew AND non-dombrew nodes...)", function() {
+            assert($b(document.createTextNode('hello '), $b('em', 'world!')).html() == 'hello <em>world!</em>')
+        });
+
         test(".append([nodes...])", function() {
             assert($b('ul').append([$b('li'), $b('li'), $b('li')]).html() == "<ul><li></li><li></li><li></li></ul>");
         });
