@@ -161,6 +161,10 @@
             assert($b('ul').append([$b('li'), $b('li'), $b('li')]).html() == "<ul><li></li><li></li><li></li></ul>");
         });
 
+        test(".append(nodes...) skips falsy values", function () {
+            assert($b('ul').append(null, $b('li', 'hello')).html() == '<ul><li>hello</li></ul>');
+        });
+
         test(".append(nodes...)", function() {
             assert($b('ul').append($b('li'), $b('li'), $b('li')).html() == "<ul><li></li><li></li><li></li></ul>");
         });

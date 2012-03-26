@@ -76,8 +76,8 @@ class Node
   # append(children... or [children])
   append: ->
     a = arguments
-    a = a[0] if "splice" of a[0]
-    for node in a
+    a = a[0] if a && a[0] && "splice" of a[0]
+    for node in a when node
       ('_brew' of node) && (node = node.dom())
       @e.appendChild node
     @
@@ -85,8 +85,8 @@ class Node
   # prepend(children... or [children])
   prepend: ->
     a = arguments
-    a = a[0] if "splice" of a[0]
-    for node in a
+    a = a[0] if a && a[0] && "splice" of a[0]
+    for node in a when node
       ('_brew' of node) && (node = node.dom())
       @e.insertBefore(node, @e.firstChild)
     @
@@ -111,7 +111,7 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4.4'
+D.VERSION = D.version = '1.4.5'
 
 # innerText fix (Firefox)
 if (navigator.appName != 'Microsoft Internet Explorer') && !HTMLElement::innerText && HTMLElement::__defineGetter__

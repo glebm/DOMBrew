@@ -70,6 +70,14 @@ You will need node and coffee-script installed:
 
 # Changelog / What's new
 
+v1.4.5
+
+* #append and #prepend skip falsy values
+
+v1.4.4
+
+* $b(nodes...) supports mixed DOMBrew/HTMLElement
+
 v1.4.3:
 
 * more IE compat

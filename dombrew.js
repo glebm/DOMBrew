@@ -94,9 +94,10 @@ Node = (function() {
   Node.prototype.append = function() {
     var a, node, _i, _len;
     a = arguments;
-    if ("splice" in a[0]) a = a[0];
+    if (a && a[0] && "splice" in a[0]) a = a[0];
     for (_i = 0, _len = a.length; _i < _len; _i++) {
       node = a[_i];
+      if (!(node)) continue;
       ('_brew' in node) && (node = node.dom());
       this.e.appendChild(node);
     }
@@ -106,9 +107,10 @@ Node = (function() {
   Node.prototype.prepend = function() {
     var a, node, _i, _len;
     a = arguments;
-    if ("splice" in a[0]) a = a[0];
+    if (a && a[0] && "splice" in a[0]) a = a[0];
     for (_i = 0, _len = a.length; _i < _len; _i++) {
       node = a[_i];
+      if (!(node)) continue;
       ('_brew' in node) && (node = node.dom());
       this.e.insertBefore(node, this.e.firstChild);
     }
@@ -153,7 +155,7 @@ this.DOMBrew = D = function() {
   return new Node(a[0], a[1], a[2]);
 };
 
-D.VERSION = D.version = '1.4.4';
+D.VERSION = D.version = '1.4.5';
 
 if ((navigator.appName !== 'Microsoft Internet Explorer') && !HTMLElement.prototype.innerText && HTMLElement.prototype.__defineGetter__) {
   HTMLElement.prototype.__defineGetter__("innerText", function() {
