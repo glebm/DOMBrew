@@ -181,6 +181,10 @@
             assert(/style.*color.*red/.test($b('span', {css: { color: 'red' }}).html()));
         });
 
+        test("$b('span', css: { marginLeft: null }) // should ignore marginLeft", function() {
+            assert(!/margin/.test($b('span', {css: { marginLeft: null }}).html()));
+        });
+
 
         test("$b(DOMElement).prepend($b('em'))", function() {
             var $elem = $('<div><span></span></div>');

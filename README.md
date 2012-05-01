@@ -70,6 +70,10 @@ You will need node and coffee-script installed:
 
 # Changelog / What's new
 
+v1.4.6
+
+* css: null and undefined values are skipped
+
 v1.4.5
 
 * #append and #prepend skip falsy values

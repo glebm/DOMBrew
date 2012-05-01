@@ -68,7 +68,7 @@ class Node
     attr['class'] && (@e.className = joinValues(attr['class'])) && delete attr['class']
     attr['text'] && (@e.innerText = joinValues(attr['text'])) && delete attr['text']
     attr['html'] && (@e.innerHTML = joinValues(attr['html'])) && delete attr['html']
-    (s[prop] = value for prop, value of css) if attr['css'] && (s = @e.style) && (css = attr['css']) && delete attr['css']
+    (s[prop] = value for prop, value of css when value?) if attr['css'] && (s = @e.style) && (css = attr['css']) && delete attr['css']
 
     flattenHash(attr)
     @e.setAttribute(name, value) for name, value of attr
@@ -111,7 +111,7 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4.5'
+D.VERSION = D.version = '1.4.6'
 
 # innerText fix (Firefox)
 if (navigator.appName != 'Microsoft Internet Explorer') && !HTMLElement::innerText && HTMLElement::__defineGetter__

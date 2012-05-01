@@ -5,6 +5,8 @@ d = document;
 Node = (function() {
   var dotHashRe, flattenHash, joinValues, parseElem;
 
+  Node.name = 'Node';
+
   Node.prototype._brew = 1;
 
   flattenHash = function(attr) {
@@ -25,10 +27,16 @@ Node = (function() {
 
   parseElem = function(elem, attr) {
     var classes, elemType, piece, pieces, pos, _i, _len;
-    if (!dotHashRe.test(elem)) return elem;
+    if (!dotHashRe.test(elem)) {
+      return elem;
+    }
     attr['class'] || (attr['class'] = []);
-    if (typeof attr['class'] === 'string') attr['class'] = [attr['class']];
-    if (dotHashRe.test(elem.charAt(0))) elem = "div" + elem;
+    if (typeof attr['class'] === 'string') {
+      attr['class'] = [attr['class']];
+    }
+    if (dotHashRe.test(elem.charAt(0))) {
+      elem = "div" + elem;
+    }
     pieces = elem.split(dotHashRe);
     elemType = pieces.shift();
     pos = elemType.length;
@@ -42,25 +50,33 @@ Node = (function() {
       }
       pos += piece.length + 1;
     }
-    if (!attr['class'].length) delete attr['class'];
+    if (!attr['class'].length) {
+      delete attr['class'];
+    }
     return elemType;
   };
 
   joinValues = function(value) {
     var i, length, r;
-    if (typeof value !== 'object') return value;
+    if (typeof value !== 'object') {
+      return value;
+    }
     r = [];
     i = -1;
     length = value.length;
     while (++i < length) {
-      if (value[i]) r.push(value[i]);
+      if (value[i]) {
+        r.push(value[i]);
+      }
     }
     return r.join(' ');
   };
 
   function Node(elem, attr, more) {
     var css, name, prop, s, value;
-    if (!(attr != null)) attr = {};
+    if (!(attr != null)) {
+      attr = {};
+    }
     if (elem.nodeType) {
       this.e = elem;
       return;
@@ -81,7 +97,9 @@ Node = (function() {
     if (attr['css'] && (s = this.e.style) && (css = attr['css']) && delete attr['css']) {
       for (prop in css) {
         value = css[prop];
-        s[prop] = value;
+        if (value != null) {
+          s[prop] = value;
+        }
       }
     }
     flattenHash(attr);
@@ -94,10 +112,14 @@ Node = (function() {
   Node.prototype.append = function() {
     var a, node, _i, _len;
     a = arguments;
-    if (a && a[0] && "splice" in a[0]) a = a[0];
+    if (a && a[0] && "splice" in a[0]) {
+      a = a[0];
+    }
     for (_i = 0, _len = a.length; _i < _len; _i++) {
       node = a[_i];
-      if (!(node)) continue;
+      if (!(node)) {
+        continue;
+      }
       ('_brew' in node) && (node = node.dom());
       this.e.appendChild(node);
     }
@@ -107,10 +129,14 @@ Node = (function() {
   Node.prototype.prepend = function() {
     var a, node, _i, _len;
     a = arguments;
-    if (a && a[0] && "splice" in a[0]) a = a[0];
+    if (a && a[0] && "splice" in a[0]) {
+      a = a[0];
+    }
     for (_i = 0, _len = a.length; _i < _len; _i++) {
       node = a[_i];
-      if (!(node)) continue;
+      if (!(node)) {
+        continue;
+      }
       ('_brew' in node) && (node = node.dom());
       this.e.insertBefore(node, this.e.firstChild);
     }
@@ -155,7 +181,7 @@ this.DOMBrew = D = function() {
   return new Node(a[0], a[1], a[2]);
 };
 
-D.VERSION = D.version = '1.4.5';
+D.VERSION = D.version = '1.4.6';
 
 if ((navigator.appName !== 'Microsoft Internet Explorer') && !HTMLElement.prototype.innerText && HTMLElement.prototype.__defineGetter__) {
   HTMLElement.prototype.__defineGetter__("innerText", function() {
