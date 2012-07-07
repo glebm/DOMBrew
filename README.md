@@ -30,6 +30,10 @@ DOMBrew examples are written entirely in [CoffeeScript](http://jashkenas.github.
     # To get html as a string:
     $b('#container').html() 
     # => "<div id="container"></div>"
+    
+    # To get as a dom node/fragment:
+    $b('#container').dom()
+    # => HTMLDivElement
 
     # == TL;DR: ==
     #= Build nodes:
