@@ -1,39 +1,27 @@
 # DOMBrew
 
-DOMBrew is a DOM builder written entirely in [CoffeeScript](http://jashkenas.github.com/coffee-script/)
-The easiest way to install it is to grab dombrew.js from the repository.
+DOMBrew examples are written entirely in [CoffeeScript](http://jashkenas.github.com/coffee-script/).
 
     # DOMBrew builds DOM from a css like selector and a hash of attributes.
-    # Normally you would alias it to a short variable
+    # 1. alias it to a short variable
     $b = DOMBrew
 
-    # Construct an element like this:
-    $b('span#the-span.classy', 'Hello World').dom()
-    # => <span id="the-span" class="classy">Hello World</span>
+    # 2. Construct an element like this:
+    $b('span#hello.notice', 'Hello World').dom()
+    # => <span id="hello" class="notice">Hello World</span>
 
-    # Or like this:
-    $b('ul#container', html: 'My <b>awesome</b> list')
-      .append(
-        $b 'li#first', 'One'
-        $b 'li', 'Two', data: { someProp: 'abc', otherProp: 'def' }
-        $b 'li', 'Three', css: { display: 'none' }
-        $b 'text', 'That is all'
+    #    or like this:
+    $b('form#search-user-by-email')
+      .append(        
+        $b 'input.autocomplete', name: 'email', type: 'text', data: { autocompleteSource: '/users/search-by-email.json' }
+        $b 'button', 'Search'
       ).dom()
     
-    # <ul id=​"container">​
-    #   My <b>​awesome​</b>​ list
-    #   <li id="first">
-    #     ​One​
-    #   </li>​
-    #   <li data-some-prop=​"abc" data-other-prop=​"def">
-    #     Two
-    #   ​</li>​
-    #   <li style="display: none">​
-    #     Three​
-    #   </li>​
-    #   That is all
-    # </ul>​
-
+    # <form id="search-user-by-email">​
+    #   <input class="autocomlpete' name="email" type="text" data-autocomplete-source"="/users/search-by-email.json">
+    #   <button>Search</button>
+    #  </form>
+    
     # Or build on the existing DOM element
     $b($('#item-title')[0])
       .prepend($b 'button.icon.fav-star', title: 'Add to favourites')
