@@ -61,15 +61,15 @@ You probably should be using client-side templating instead of building DOM dire
     #  .html()  # => result as html in a string
 
 ---
+
 ## Contribute
 
-Fork. Develop. Extra points for tests (see test.html). :)
-
+Tests are in `test.html`
 You will need node and coffee-script installed:
 
 * Follow these instructions to install node and npm: https://github.com/joyent/node/wiki/Installation
 * npm install -g coffee-script
 
-# Credits:
+### Inspiration
 
 * DOMBrew started off as a CoffeeScript rewrite of skyzyx's DOMBuilder https://github.com/skyzyx/dombuilder
