@@ -2,7 +2,7 @@
 
 You probably should be using client-side templating instead of building DOM directly. If not, here is DOMBrew, a tiny dom builder:
 
-### DOMBrew is kind of long, but you can alias it
+DOMBrew is kind of long, but you can alias it
         
     $b = DOMBrew 
 
