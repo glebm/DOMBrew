@@ -1,7 +1,6 @@
 # DOMBrew
 
-You probably should be using client-side templating instead of building DOM directly.
-Still, if you have to, here is DOMBrew, a tiny dom builder:
+You probably should be using client-side templating instead of building DOM directly. If not, here is DOMBrew, a tiny dom builder:
 
 *[CoffeeScript](http://jashkenas.github.com/coffee-script/) below*
 
