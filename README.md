@@ -37,32 +37,36 @@ You probably should be using client-side templating instead of building DOM dire
     $b('#container').dom()
     # => HTMLDivElement
 
-    # == TL;DR: ==
-    #
-    #= Build nodes:
-    #
-    #  $b "a#my-id.some-class", "hello world!", href: "/hello.html"
-    #  $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
-    #  $b "text", "hello world!" # <- to build a text node
-    #
-    #= Append/prepend children:
-    #
-    #  .append(children... or [children...])
-    #  .prepend(children... or [children...])
-    #
-    #= Access existing nodes as a DOMBrew object:
-    #
-    #  $b document.getElementById("my-elem") # <- 1 DOM node
-    #  $b(nodes... or [nodes...])            # <- wrap multiple DOMBrew nodes (uses awesome DocumentFragment internally)
-    #
-    #= Get results:
-    #
-    #  .dom()   # => result as DOM
-    #  .html()  # => result as html in a string
+*Reference*
+        
+    # Build nodes:
+    
+    $b "a#my-id.some-class", "hello world!", href: "/hello.html"
+    $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
+    $b "text", "hello world!" # <- to build a text node
+    
+    # Append/prepend children:
+    
+    node.append(children... or [children...])
+    node.prepend(children... or [children...])
+    
+    # Access existing nodes as a DOMBrew object:
+    
+    $b document.getElementById("my-elem") # <- 1 DOM node
+    $b(nodes... or [nodes...])            # <- wrap multiple DOMBrew nodes (uses awesome DocumentFragment internally)
+    
+    # Get results:
+    
+    node.dom()   # result as DOM
+    node.html()  # result as html in a string
 
----
 
-## Contribute
+
+### Inspiration
+
+* DOMBrew started off as a CoffeeScript rewrite of skyzyx's DOMBuilder https://github.com/skyzyx/dombuilder
+
+### Contribute
 
 Tests are in `test.html`
 You will need node and coffee-script installed:
@@ -70,6 +74,3 @@ You will need node and coffee-script installed:
 * Follow these instructions to install node and npm: https://github.com/joyent/node/wiki/Installation
 * npm install -g coffee-script
 
-### Inspiration
-
-* DOMBrew started off as a CoffeeScript rewrite of skyzyx's DOMBuilder https://github.com/skyzyx/dombuilder
