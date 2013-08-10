@@ -1,6 +1,9 @@
 # DOMBrew
 
-DOMBrew examples are written entirely in [CoffeeScript](http://jashkenas.github.com/coffee-script/).
+You should be using client-side templating instead of building DOM in code.
+Still, if you have to, DOMBrew is a small library with simple api.
+
+documentation with examples in [CoffeeScript](http://jashkenas.github.com/coffee-script/):
 
     # DOMBrew builds DOM from a css like selector and a hash of attributes.
     # 1. alias it to a short variable
@@ -36,17 +39,25 @@ DOMBrew examples are written entirely in [CoffeeScript](http://jashkenas.github.
     # => HTMLDivElement
 
     # == TL;DR: ==
+    #
     #= Build nodes:
+    #
     #  $b "a#my-id.some-class", "hello world!", href: "/hello.html"
     #  $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
     #  $b "text", "hello world!" # <- to build a text node
+    #
     #= Append/prepend children:
+    #
     #  .append(children... or [children...])
     #  .prepend(children... or [children...])
+    #
     #= Access existing nodes as a DOMBrew object:
+    #
     #  $b document.getElementById("my-elem") # <- 1 DOM node
     #  $b(nodes... or [nodes...])            # <- wrap multiple DOMBrew nodes (uses awesome DocumentFragment internally)
+    #
     #= Get results:
+    #
     #  .dom()   # => result as DOM
     #  .html()  # => result as html in a string
 
