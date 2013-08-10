@@ -2,10 +2,11 @@
 
 You probably should be using client-side templating instead of building DOM directly. If not, here is DOMBrew, a tiny dom builder:
 
+### DOMBrew is kind of long, but you can alias it
+        
+    $b = DOMBrew 
+
 ### build nodes
-    
-    # it's your responsibility to alias DOMBrew to a short variable:        
-    $b = DOMBrew
     
     # build with css-like selector, (optional) text content, and attributes
     node = $b "a#my-id.some-class", "hello world!", href: "/hello.html"
@@ -31,7 +32,9 @@ You probably should be using client-side templating instead of building DOM dire
     
     # you can add jq() if you use jQuery
     $b::jq = -> jQuery @dom()
-    node.jq() # now you can
+    
+    # now you can
+    node.jq() 
 
 
 Some more examples below
@@ -39,12 +42,12 @@ Some more examples below
    
     $b('form#search-user-by-email')
       .append(        
-        $b 'input.autocomplete', name: 'email', type: 'text', data: { emailSource: '/search-by-email.json' }
+        $b 'input.autocomplete', name: 'email', type: 'text', data: { emailSrc: '/user-emails.json' }
         $b 'button', 'Search', class: %w(btn btn-primary)
       ).dom()
     
     # <form id="search-user-by-email">​
-    #   <input class='autocomplete' name='email' type='text' data-email-source='/search-by-email.json'>
+    #   <input class='autocomplete' name='email' type='text' data-email-src='/user-emails.json'>
     #   <button class='btn btn-primary'>Search</button>
     #  </form>
     
@@ -57,7 +60,6 @@ Some more examples below
     $b('#container').html() # "<div id="container"></div>"        
     $b('#container').dom()  #  HTMLDivElement
         
-
 
 ## Inspiration
 
