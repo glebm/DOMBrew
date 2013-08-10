@@ -2,7 +2,7 @@
 
 You probably should be using client-side templating instead of building DOM directly. If not, here is DOMBrew, a tiny dom builder:
 
-*[CoffeeScript](http://jashkenas.github.com/coffee-script/) below*
+*Introduction with [CoffeeScript](http://jashkenas.github.com/coffee-script/) examples*
 
     # DOMBrew builds DOM from a css like selector and a hash of attributes.
     # 1. alias it to a short variable
@@ -36,37 +36,44 @@ You probably should be using client-side templating instead of building DOM dire
     # To get as a dom node/fragment:
     $b('#container').dom()
     # => HTMLDivElement
-
-*Reference*
         
-    # Build nodes:
+### build nodes
     
-    $b "a#my-id.some-class", "hello world!", href: "/hello.html"
-    $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
-    $b "text", "hello world!" # <- to build a text node
+    # it's your responsibility to alias DOMBrew to a short variable:        
+    $b = DOMBrew
     
-    # Append/prepend children:
-    
-    node.append(children... or [children...])
-    node.prepend(children... or [children...])
-    
-    # Access existing nodes as a DOMBrew object:
-    
+    # build with css-like selector, (optional) text content, and attributes
+    node = $b "a#my-id.some-class", "hello world!", href: "/hello.html"
+    # classes will be flattened and joined, data- will be hyphenized 
+    node = $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
+    # use 'text' to build a simple text node
+    node = $b "text", "hello world!" # <- to build a text node
+
+    # you can wrap a dom element as $b node
     $b document.getElementById("my-elem") # <- 1 DOM node
     $b(nodes... or [nodes...])            # <- wrap multiple DOMBrew nodes (uses awesome DocumentFragment internally)
+
+### append / prepend children
     
-    # Get results:
+    # append / prepend children ($b nodes and / or dom elements)    
+    node.append(children... or [children...])
+    node.prepend(children... or [children...])
+        
+### get the data
     
     node.dom()   # result as DOM
     node.html()  # result as html in a string
+    
+    # you can add jq() if you use jQuery
+    $b::jq = -> jQuery @dom()
+    node.jq() # now you can
 
 
-
-### Inspiration
+## Inspiration
 
 * DOMBrew started off as a CoffeeScript rewrite of skyzyx's DOMBuilder https://github.com/skyzyx/dombuilder
 
-### Contribute
+## Contribute
 
 Tests are in `test.html`
 You will need node and coffee-script installed:
