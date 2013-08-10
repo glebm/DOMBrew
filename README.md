@@ -1,7 +1,7 @@
 # DOMBrew
 
-You should be using client-side templating instead of building DOM in code.
-Still, if you have to, DOMBrew is a small library with simple api.
+You probably should be using client-side templating instead of building DOM directly.
+Still, if you have to, here is DOMBrew, a tiny dom builder:
 
 documentation with examples in [CoffeeScript](http://jashkenas.github.com/coffee-script/):
 
