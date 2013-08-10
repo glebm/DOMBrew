@@ -3,7 +3,7 @@
 You probably should be using client-side templating instead of building DOM directly.
 Still, if you have to, here is DOMBrew, a tiny dom builder:
 
-documentation with examples in [CoffeeScript](http://jashkenas.github.com/coffee-script/):
+*[CoffeeScript](http://jashkenas.github.com/coffee-script/) below*
 
     # DOMBrew builds DOM from a css like selector and a hash of attributes.
     # 1. alias it to a short variable
