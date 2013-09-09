@@ -36,12 +36,12 @@ node.dom()   # result as DOM
 node.html()  # result as html in a string
 ```
 
-### jquery
+### jQuery
 
 ```coffeescript    
-# .$() to get as jquery node: $('a').$().hide()
+# .$() to get as jquery node: node.$()
 $b::$ = -> $ @dom()
-node.$() 
+$b('text', 'hello').$().wrap('<p>').appendTo(document.body)
 ```
 
 More examples
