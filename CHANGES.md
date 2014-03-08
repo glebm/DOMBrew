@@ -3,6 +3,7 @@
 v1.5.0
 
 * To build text nodes: was `$b('text', 'hello')` now `$b('', 'hello')` or `$b.text('hello')`
+* Fixed for ie11
 
 v1.4.6
 
