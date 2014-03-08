@@ -1,0 +1,22 @@
+{
+  "name": "DOMBrew",
+  "main": "dombrew.js",
+  "version": "1.5.0",
+  "homepage": "https://github.com/glebm/DOMBrew",
+  "authors": [
+    "Gleb Mazovetskiy <glex.spb@gmail.com>"
+  ],
+  "description": "a tiny dom builder for the browser",
+  "keywords": [
+    "dom",
+    "dsl"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

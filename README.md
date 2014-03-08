@@ -14,8 +14,10 @@ $b = DOMBrew
 node = $b "a#my-id.some-class", "hello world!", href: "/hello.html"
 # classes will be flattened and joined, data- will be hyphenized 
 node = $b "#cont", class: ["cls1", "cls2"], data: { someProp: "hi", dat2: "hello" }
-# use 'text' to build a simple text node
-node = $b "text", "hello world!" # <- to build a text node
+# use .text to build a text node
+node = $b.text('hello world!') # <- builds a text node
+# same as
+node = $b('', 'hello world!') # <- builds a text node
 
 # you can wrap a dom element as $b node
 $b document.getElementById("my-elem") # <- 1 DOM node
@@ -41,7 +43,7 @@ node.html()  # result as html in a string
 ```coffeescript    
 # .$() to get as jquery node: node.$()
 $b::$ = -> $ @dom()
-$b('text', 'hello').$().wrap('<p>').appendTo(document.body)
+$b.text('hello').$().wrap('<p>').appendTo(document.body)
 ```
 
 More examples

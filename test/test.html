@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
     <script src="../dombrew.js" type="text/javascript"></script>
@@ -128,16 +129,24 @@
         }
 
         var $b = DOMBrew;
-        test("$b('text', 'hello world!')", function() {
-            assert($b('text', 'hello world!').html() == "hello world!")
+        var expectEqI = function(a, b) {
+          assert(a.toLowerCase() == b.toLowerCase())
+        };
+
+        test("$b('', 'hello world!')", function() {
+            expectEqI($b('', 'hello world!').html(), "hello world!")
         });
 
-        test ("$b('text', '')", function() {
-            assert($b('text', '').html() == '')
+        test("$b.text('hello world!')", function() {
+            expectEqI($b.text('hello world!').html(), "hello world!")
+        });
+
+        test ("$b('', '')", function() {
+            assert($b('', '').html() == '')
         });
 
         test("$b('span', 'hello', data: {es: 'hola'})", function() {
-            assert($b('span', 'hello', {data: {es: 'hola'}}).html() == "<span data-es=\"hola\">hello</span>")
+            expectEqI($b('span', 'hello', {data: {es: 'hola'}}).html(), "<span data-es=\"hola\">hello</span>")
         });
 
         test("$b('ul#list-1.class1.class2')", function() {
@@ -146,49 +155,49 @@
         });
 
         test("$b([nodes...])", function() {
-            assert($b([$b('text', 'hello '), $b('em', 'world!')]).html() == 'hello <em>world!</em>')
+            expectEqI($b([$b('', 'hello '), $b('em', 'world!')]).html(), 'hello <em>world!</em>')
         });
 
         test("$b(nodes...)", function() {
-            assert($b($b('text', 'hello '), $b('em', 'world!')).html() == 'hello <em>world!</em>')
+            expectEqI($b($b('', 'hello '), $b('em', 'world!')).html(), 'hello <em>world!</em>')
         });
 
         test("$b(dombrew AND non-dombrew nodes...)", function() {
-            assert($b(document.createTextNode('hello '), $b('em', 'world!')).html() == 'hello <em>world!</em>')
+            expectEqI($b(document.createTextNode('hello '), $b('em', 'world!')).html(), 'hello <em>world!</em>')
         });
 
         test(".append([nodes...])", function() {
-            assert($b('ul').append([$b('li'), $b('li'), $b('li')]).html() == "<ul><li></li><li></li><li></li></ul>");
+            expectEqI($b('ul').append([$b('li'), $b('li'), $b('li')]).html().replace(/\s+/g, ''), "<ul><li></li><li></li><li></li></ul>");
         });
 
         test(".append(nodes...) skips falsy values", function () {
-            assert($b('ul').append(null, $b('li', 'hello')).html() == '<ul><li>hello</li></ul>');
+            expectEqI($b('ul').append(null, $b('li', 'hello')).html().replace(/\s+/g, ''), '<ul><li>hello</li></ul>');
         });
 
         test(".append(nodes...)", function() {
-            assert($b('ul').append($b('li'), $b('li'), $b('li')).html() == "<ul><li></li><li></li><li></li></ul>");
+            expectEqI($b('ul').append($b('li'), $b('li'), $b('li')).html().replace(/\s+/g, ''), "<ul><li></li><li></li><li></li></ul>");
         });
 
         test(".prepend([nodes...])", function() {
-            assert($b('p').prepend([$b('strong'), $b('span'), $b('em')]).html() == "<p><em></em><span></span><strong></strong></p>");
+            expectEqI($b('p').prepend([$b('strong'), $b('span'), $b('em')]).html().replace(/\s+/g, ''), "<p><em></em><span></span><strong></strong></p>");
         });
 
         test(".prepend(nodes...)", function() {
-            assert($b('p').prepend($b('strong'), $b('span'), $b('em')).html() == "<p><em></em><span></span><strong></strong></p>");
+            expectEqI($b('p').prepend($b('strong'), $b('span'), $b('em')).html().replace(/\s+/g, ''), "<p><em></em><span></span><strong></strong></p>");
         });
 
         test("$b('span', css: { display: 'none' })", function() {
-            assert(/style.*color.*red/.test($b('span', {css: { color: 'red' }}).html()));
+            assert(/style.*color.*red/i.test($b('span', {css: { color: 'red' }}).html()));
         });
 
         test("$b('span', css: { marginLeft: null }) // should ignore marginLeft", function() {
-            assert(!/margin/.test($b('span', {css: { marginLeft: null }}).html()));
+            assert(!/margin/i.test($b('span', {css: { marginLeft: null }}).html()));
         });
 
 
         test("$b(DOMElement).prepend($b('em'))", function() {
             var $elem = $('<div><span></span></div>');
-            assert($b($elem[0]).prepend($b('em')).html() == "<div><em></em><span></span></div>");
+            expectEqI($b($elem[0]).prepend($b('em')).html(), "<div><em></em><span></span></div>");
         });
 
         benchmark("Complex DOM (table with an inner table)", 5000, function() {

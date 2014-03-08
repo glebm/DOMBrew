@@ -1,5 +1,9 @@
 # Changelog / What's new
 
+v1.5.0
+
+* To build text nodes: was `$b('text', 'hello')` now `$b('', 'hello')` or `$b.text('hello')`
+
 v1.4.6
 
 * css: null and undefined values are skipped

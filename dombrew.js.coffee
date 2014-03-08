@@ -3,9 +3,6 @@
 # @author Gleb Mazovetskiy
 d = document
 class Node
-  # Identification property
-  _brew: 1
-
   # {data: {someProp: 1}} => {"data-some-prop" => 1}
   flattenHash = (attr) ->
     for name, obj of attr
@@ -52,12 +49,15 @@ class Node
   constructor: (elem, attr, more) ->
     attr = {} if !attr?
     if elem.nodeType
+      # dom element
       @e = elem
       return
-    else if elem == 'text'
+    else if elem == ''
+      # text node
       @e = d.createTextNode attr
       return
     else
+      # attr is text, more is attr
       if typeof attr == "string"
         more ||= {}
         more.text = attr
@@ -97,6 +97,9 @@ class Node
 Node::asDOM  = Node::dom
 Node::asHTML = Node::html
 
+# Property to help us identify type
+Node::_brew  = 1
+
 # DOMbrew(nodes... or [nodes])
 @DOMBrew = D = ->
   a = arguments
@@ -111,16 +114,12 @@ Node::asHTML = Node::html
     a = [frag]
   new Node(a[0], a[1], a[2])
 
-D.VERSION = D.version = '1.4.6'
+# create text DOMBrew node
+D.text = (text) -> new Node('', text)
+
+D.VERSION = D.version = '1.5.0'
 
 # innerText fix (Firefox)
-if (navigator.appName != 'Microsoft Internet Explorer') && !HTMLElement::innerText && HTMLElement::__defineGetter__
+if (navigator.appName != 'Microsoft Internet Explorer') && !('innerText' of HTMLElement.prototype) && ('__defineGetter__' of HTMLElement)
   HTMLElement::__defineGetter__ "innerText", -> @textContent
   HTMLElement::__defineSetter__ "innerText", (value) -> @textContent = value
-
-
-
-
-
-
-
